@@ -1,1 +1,1 @@
-# HUGApp
+# HUCApp

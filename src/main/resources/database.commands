@@ -1,19 +1,12 @@
 drop table if exists vendor;
-drop table if exists utility;
 drop table if exists address;
 drop table if exists place;
 drop table if exists settlement;
 
-create table if not exists utility (
-    id integer primary key,
-    name text not null
-);
-
 create table if not exists vendor (
-    id integer primary key,
+    id integer primary key autoincrement,
     vendor_name text not null,
-    utility_id integer not null,
-    foreign key (utility_id) references utility (id)
+    utility text not null
 );
 
 create table if not exists address (
@@ -39,6 +32,7 @@ create table if not exists settlement (
     date_end text not null,
     utility_id integer not null,
     place_id integer not null,
-    foreign key (utility_id) references utility (id),
     foreign key (place_id) references place (id)
 );
+
+select * from vendor;
