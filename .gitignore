@@ -2,5 +2,6 @@
 *.class
 *.sqlite
 *.properties
+console.commands
 target
 .idea
