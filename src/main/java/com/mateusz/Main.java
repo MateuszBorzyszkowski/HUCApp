@@ -1,19 +1,19 @@
 package com.mateusz;
 
-import com.mateusz.reader.Reader;
+import com.mateusz.reader.MainReader;
 
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Reader reader = Reader.getInstance();
+        MainReader mainReader = MainReader.getInstance();
         Scanner scanner = new Scanner(System.in);
         boolean appOn = true;
 
         while (appOn) {
             System.out.print(">> ");
             String str = scanner.nextLine();
-            appOn = reader.readCommand(str);
+            appOn = mainReader.readCommand(str);
         }
     }
 }
