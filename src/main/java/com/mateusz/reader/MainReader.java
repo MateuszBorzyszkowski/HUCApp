@@ -1,13 +1,15 @@
 package com.mateusz.reader;
 
 import com.mateusz.enums.VendorOption;
-import com.mateusz.reader.validator.MainReaderValidator;
+import com.mateusz.exception.CommandNotRecognizedException;
+import com.mateusz.exception.CountOfCommandsNotEnoughException;
+import com.mateusz.reader.validator.ReaderValidator;
 
 import java.util.*;
 
 public class MainReader {
     private static MainReader instance = null;
-    private final MainReaderValidator mainReaderValidator = MainReaderValidator.getInstance();
+    private final ReaderValidator readerValidator = ReaderValidator.getInstance();
     private final VendorReader vendorReader = VendorReader.getInstance();
 
     private MainReader() {
@@ -20,12 +22,23 @@ public class MainReader {
         return instance;
     }
 
-    public boolean readCommand(String command) {
+    public boolean initMainCommand(String command) {
+        try {
+            return readCommand(command);
+        } catch (CommandNotRecognizedException e) {
+            e.printStackTrace();
+        } catch (CountOfCommandsNotEnoughException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private boolean readCommand(String command) throws CommandNotRecognizedException, CountOfCommandsNotEnoughException {
         String[] splitCommand = command.split("\\s");
 
         ArrayList<String> parseCommand = new ArrayList<String>(Arrays.asList(splitCommand));
 
-        if (mainReaderValidator.validate(parseCommand.size())) {
+        if (readerValidator.mainReaderValidate(parseCommand.size(), parseCommand.get(0))) {
             switch (parseCommand.get(0)) {
                 case "add":
                     return addCommand(parseCommand);
@@ -40,43 +53,48 @@ public class MainReader {
                     System.out.println("Exit");
                     return false;
                 default:
-                    System.out.println("Command '" + parseCommand.get(0) + "' not recognized. Type 'help' command to more information.");
-                    return true;
+                    throw new CommandNotRecognizedException("Command '" + parseCommand.get(0) + "' not recognized. Type 'help' command to more information.");
             }
+        } else {
+            throw new CountOfCommandsNotEnoughException("Number of commands is not enough! Type 'help' command to more information.");
         }
-        System.out.println("Number of commands is not enough! Type 'help' command to more information.");
-        return true;
     }
 
-    private boolean addCommand(ArrayList<String> command) {
+    private boolean addCommand(ArrayList<String> command) throws CommandNotRecognizedException, CountOfCommandsNotEnoughException {
         command.remove(0);
 
-        switch (command.get(0)) {
-            case "vendor":
-                return vendorReader.initVendorCommand(command, VendorOption.ADD);
-            case "place":
-            default:
-                System.out.println("Command '" + command.get(0) + "' for 'add' option not recognized! Type 'help' command to more information.");
-                return true;
+        if (readerValidator.mainReaderValidate(command.size(), VendorOption.ADD)) {
+            switch (command.get(0)) {
+                case "vendor":
+                    return vendorReader.initVendorCommand(command, VendorOption.ADD);
+                case "place":
+                default:
+                    throw new CommandNotRecognizedException("Command '" + command.get(0) + "' for 'add' option not recognized! Type 'help' command to more information.");
+            }
+        } else {
+            throw new CountOfCommandsNotEnoughException("Number of commands is not enough! Type 'help' command to more information.");
         }
 
     }
 
-    private boolean removeCommand(ArrayList<String> command) {
+    private boolean removeCommand(ArrayList<String> command) throws CommandNotRecognizedException, CountOfCommandsNotEnoughException {
         command.remove(0);
 
-        switch (command.get(0)) {
-            case "vendor":
-                return vendorReader.initVendorCommand(command, VendorOption.REMOVE);
-            case "place":
-            default:
-                System.out.println("Command '" + command.get(0) + "' for 'remove' option not recognized! Type 'help' command to more information.");
-                return true;
+        if (readerValidator.mainReaderValidate(command.size(), VendorOption.REMOVE)) {
+            switch (command.get(0)) {
+                case "vendor":
+                    return vendorReader.initVendorCommand(command, VendorOption.REMOVE);
+                case "place":
+                default:
+                    throw new CommandNotRecognizedException("Command '" + command.get(0) + "' for 'remove' option not recognized! Type 'help' command to more information.");
+            }
+        } else {
+            throw new CountOfCommandsNotEnoughException("Number of commands is not enough! Type 'help' command to more information.");
         }
 
     }
 
-    private boolean showCommand(ArrayList<String> command) {
+    private boolean showCommand(ArrayList<String> command) throws CommandNotRecognizedException {
         command.remove(0);
 
         switch (command.get(0)) {
@@ -84,8 +102,7 @@ public class MainReader {
                 return vendorReader.initVendorCommand(command, VendorOption.SHOW);
             case "place":
             default:
-                System.out.println("Command '" + command.get(0) + "' for 'show' option not recognized! Type 'help' command to more information.");
-                return true;
+                throw new CommandNotRecognizedException("Command '" + command.get(0) + "' for 'show' option not recognized! Type 'help' command to more information.");
         }
 
     }

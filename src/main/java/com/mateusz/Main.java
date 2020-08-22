@@ -11,9 +11,8 @@ public class Main {
         boolean appOn = true;
 
         while (appOn) {
-            System.out.print(">> ");
             String str = scanner.nextLine();
-            appOn = mainReader.readCommand(str);
+            appOn = mainReader.initMainCommand(str);
         }
     }
 }

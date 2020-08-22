@@ -2,8 +2,8 @@ package com.mateusz.reader;
 
 import com.mateusz.api.VendorService;
 import com.mateusz.enums.VendorOption;
+import com.mateusz.exception.CommandNotRecognizedException;
 import com.mateusz.model.Vendor;
-import com.mateusz.reader.validator.VendorReaderValidator;
 import com.mateusz.service.VendorServiceImpl;
 
 import java.util.ArrayList;
@@ -12,7 +12,6 @@ import java.util.Iterator;
 public class VendorReader {
     private static VendorReader instance = null;
     private final VendorService vendorService = VendorServiceImpl.getInstance();
-    private final VendorReaderValidator vendorReaderValidator = VendorReaderValidator.getInstance();
 
     private VendorReader() {
     }
@@ -24,11 +23,11 @@ public class VendorReader {
         return instance;
     }
 
-    public boolean initVendorCommand(ArrayList<String> command, VendorOption option) {
+    public boolean initVendorCommand(ArrayList<String> command, VendorOption option) throws CommandNotRecognizedException {
         return vendorCommand(command, option);
     }
 
-    private boolean vendorCommand(ArrayList<String> command, VendorOption option) {
+    private boolean vendorCommand(ArrayList<String> command, VendorOption option) throws CommandNotRecognizedException {
         String name = null;
         String utility = null;
         String s = null;
@@ -48,8 +47,7 @@ public class VendorReader {
                     utility = iter.next();
                     break;
                 default:
-                    System.out.println("Parameter '" + s + "' not recognized! Type 'help' command to more information.");
-                    return true;
+                    throw new CommandNotRecognizedException("Parameter '" + s + "' not recognized! Type 'help' command to more information.");
             }
 
         }
@@ -58,7 +56,6 @@ public class VendorReader {
     }
 
     private void runVendorOption(String name, String utility, VendorOption option) {
-        if (vendorReaderValidator.isSomeNameExist(name, utility, option)) {
             switch (option) {
                 case ADD:
                     vendorService.addVendor(new Vendor(name, utility));
@@ -72,8 +69,5 @@ public class VendorReader {
                     }
                     break;
             }
-        } else {
-            System.out.println("Invalid count of parameters!");
-        }
     }
 }
