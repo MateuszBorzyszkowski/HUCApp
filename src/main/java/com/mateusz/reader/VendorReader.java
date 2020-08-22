@@ -51,23 +51,24 @@ public class VendorReader {
             }
 
         }
-        runVendorOption(name, utility, option);
-        return true;
+        return runVendorOption(name, utility, option);
     }
 
-    private void runVendorOption(String name, String utility, VendorOption option) {
+    private boolean runVendorOption(String name, String utility, VendorOption option) {
             switch (option) {
                 case ADD:
                     vendorService.addVendor(new Vendor(name, utility));
-                    break;
+                    return true;
                 case REMOVE:
+                    //TODO: Dont find name? + UnitTest
                     vendorService.removeVendorByName(name);
-                    break;
+                    return true;
                 case SHOW:
                     for (Vendor vendor : vendorService.getAllVendors()) {
                         System.out.println(vendor.getName() + " (" + vendor.getUtility() + ")");
                     }
-                    break;
+                    return true;
             }
+            return false;
     }
 }

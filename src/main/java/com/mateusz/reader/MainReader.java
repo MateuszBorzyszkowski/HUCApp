@@ -94,16 +94,19 @@ public class MainReader {
 
     }
 
-    private boolean showCommand(ArrayList<String> command) throws CommandNotRecognizedException {
+    private boolean showCommand(ArrayList<String> command) throws CommandNotRecognizedException, CountOfCommandsNotEnoughException {
         command.remove(0);
 
-        switch (command.get(0)) {
-            case "vendor":
-                return vendorReader.initVendorCommand(command, VendorOption.SHOW);
-            case "place":
-            default:
-                throw new CommandNotRecognizedException("Command '" + command.get(0) + "' for 'show' option not recognized! Type 'help' command to more information.");
+        if (readerValidator.mainReaderValidate(command.size(), VendorOption.SHOW)) {
+            switch (command.get(0)) {
+                case "vendor":
+                    return vendorReader.initVendorCommand(command, VendorOption.SHOW);
+                case "place":
+                default:
+                    throw new CommandNotRecognizedException("Command '" + command.get(0) + "' for 'show' option not recognized! Type 'help' command to more information.");
+            }
+        } else {
+            throw new CountOfCommandsNotEnoughException("Number of commands is not enough! Type 'help' command to more information.");
         }
-
     }
 }
