@@ -119,4 +119,19 @@ public class MainReaderTest {
         Assert.assertFalse(excepted);
     }
 
+    // No vendor to remove
+    @Test
+    public void testNoVendorToRemove() {
+        String command = "add vendor -n test_name -u test_utility";
+        String command2 = "remove vendor -n test";
+        boolean excepted = false;
+
+        MainReader mainReader = MainReader.getInstance();
+        boolean exceptedNoCheck = mainReader.initMainCommand(command);
+        if (exceptedNoCheck) {
+            excepted = mainReader.initMainCommand(command2);
+        }
+
+        Assert.assertFalse(excepted);
+    }
 }

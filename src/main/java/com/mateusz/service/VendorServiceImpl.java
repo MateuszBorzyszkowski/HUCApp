@@ -3,6 +3,7 @@ package com.mateusz.service;
 import com.mateusz.api.VendorDao;
 import com.mateusz.api.VendorService;
 import com.mateusz.dao.VendorDaoImpl;
+import com.mateusz.exception.VendorToRemoveNotExistException;
 import com.mateusz.model.Vendor;
 
 import java.util.List;
@@ -29,8 +30,12 @@ public class VendorServiceImpl implements VendorService {
     }
 
     @Override
-    public void removeVendorByName(String vendorName) {
-        vendorDao.removeVendorByName(vendorName);
+    public void removeVendorByName(String vendorName) throws VendorToRemoveNotExistException {
+        if (isVendorAlreadyExist(vendorName)) {
+            vendorDao.removeVendorByName(vendorName);
+        } else {
+            throw new VendorToRemoveNotExistException("No vendor in the database!");
+        }
     }
 
     @Override

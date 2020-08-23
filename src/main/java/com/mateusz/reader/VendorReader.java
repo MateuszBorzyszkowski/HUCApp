@@ -3,6 +3,7 @@ package com.mateusz.reader;
 import com.mateusz.api.VendorService;
 import com.mateusz.enums.VendorOption;
 import com.mateusz.exception.CommandNotRecognizedException;
+import com.mateusz.exception.VendorToRemoveNotExistException;
 import com.mateusz.model.Vendor;
 import com.mateusz.service.VendorServiceImpl;
 
@@ -60,9 +61,13 @@ public class VendorReader {
                     vendorService.addVendor(new Vendor(name, utility));
                     return true;
                 case REMOVE:
-                    //TODO: Dont find name? + UnitTest
-                    vendorService.removeVendorByName(name);
-                    return true;
+                    try {
+                        vendorService.removeVendorByName(name);
+                        return true;
+                    } catch (VendorToRemoveNotExistException e) {
+                        e.printStackTrace();
+                    }
+                    return false;
                 case SHOW:
                     for (Vendor vendor : vendorService.getAllVendors()) {
                         System.out.println(vendor.getName() + " (" + vendor.getUtility() + ")");

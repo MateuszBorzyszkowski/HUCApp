@@ -24,13 +24,17 @@ public class MainReader {
 
     public boolean initMainCommand(String command) {
         try {
-            return readCommand(command);
+            if (command.equals("exit")) {
+                return false;
+            } else {
+                return readCommand(command);
+            }
         } catch (CommandNotRecognizedException e) {
             e.printStackTrace();
         } catch (CountOfCommandsNotEnoughException e) {
             e.printStackTrace();
         }
-        return false;
+        return true;
     }
 
     private boolean readCommand(String command) throws CommandNotRecognizedException, CountOfCommandsNotEnoughException {
@@ -49,9 +53,6 @@ public class MainReader {
                 case "help":
                     System.out.println("Help");
                     return true;
-                case "exit":
-                    System.out.println("Exit");
-                    return false;
                 default:
                     throw new CommandNotRecognizedException("Command '" + parseCommand.get(0) + "' not recognized. Type 'help' command to more information.");
             }
