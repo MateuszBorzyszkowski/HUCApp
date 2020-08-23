@@ -1,0 +1,24 @@
+HUCApp commands
+
+$ java -jar [jar name]
+$ [option] ([parameter] [name],...)
+
+description:
+    add
+        vendor
+            -name, -n
+            -utility, -u
+
+    remove
+        vendor
+            -name, -n
+
+    show
+        vendor
+
+    exit
+
+Example:
+$ add vendor -name nameOfVendor -utility gas
+$ remove vendor -name nameOfVendor
+
