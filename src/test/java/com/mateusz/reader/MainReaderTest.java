@@ -1,7 +1,12 @@
 package com.mateusz.reader;
 
+import com.mateusz.exception.CommandNotRecognizedException;
+import com.mateusz.exception.CountOfCommandsNotEnoughException;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainReaderTest {
 
@@ -9,9 +14,11 @@ public class MainReaderTest {
     @Test
     public void testVendorAddCommandValid() {
         String command = "add vendor -n test_name -u test_utility";
+        String[] splitCommand = command.split("\\s");
+        ArrayList<String> parseCommand = new ArrayList<String>(Arrays.asList(splitCommand));
 
         MainReader mainReader = MainReader.getInstance();
-        boolean excepted = mainReader.initMainCommand(command);
+        boolean excepted = mainReader.readCommand(parseCommand);
 
         Assert.assertTrue(excepted);
     }
@@ -19,9 +26,11 @@ public class MainReaderTest {
     @Test
     public void testVendorRemoveCommandValid() {
         String command = "remove vendor -n test_name";
+        String[] splitCommand = command.split("\\s");
+        ArrayList<String> parseCommand = new ArrayList<String>(Arrays.asList(splitCommand));
 
         MainReader mainReader = MainReader.getInstance();
-        boolean excepted = mainReader.initMainCommand(command);
+        boolean excepted = mainReader.readCommand(parseCommand);
 
         Assert.assertTrue(excepted);
     }
@@ -29,9 +38,11 @@ public class MainReaderTest {
     @Test
     public void testVendorShowCommandValid() {
         String command = "show vendor";
+        String[] splitCommand = command.split("\\s");
+        ArrayList<String> parseCommand = new ArrayList<String>(Arrays.asList(splitCommand));
 
         MainReader mainReader = MainReader.getInstance();
-        boolean excepted = mainReader.initMainCommand(command);
+        boolean excepted = mainReader.readCommand(parseCommand);
 
         Assert.assertTrue(excepted);
     }
@@ -40,9 +51,11 @@ public class MainReaderTest {
     @Test
     public void testOneVendorAddCommandInvalid() {
         String command = "add vendor -n test_name";
+        String[] splitCommand = command.split("\\s");
+        ArrayList<String> parseCommand = new ArrayList<String>(Arrays.asList(splitCommand));
 
         MainReader mainReader = MainReader.getInstance();
-        boolean excepted = mainReader.initMainCommand(command);
+        boolean excepted = mainReader.readCommand(parseCommand);
 
         Assert.assertFalse(excepted);
     }
@@ -50,9 +63,11 @@ public class MainReaderTest {
     @Test
     public void testTwoVendorAddCommandInvalid() {
         String command = "add vendor -n";
+        String[] splitCommand = command.split("\\s");
+        ArrayList<String> parseCommand = new ArrayList<String>(Arrays.asList(splitCommand));
 
         MainReader mainReader = MainReader.getInstance();
-        boolean excepted = mainReader.initMainCommand(command);
+        boolean excepted = mainReader.readCommand(parseCommand);
 
         Assert.assertFalse(excepted);
     }
@@ -60,9 +75,11 @@ public class MainReaderTest {
     @Test
     public void testThreeVendorAddCommandInvalid() {
         String command = "add vendor";
+        String[] splitCommand = command.split("\\s");
+        ArrayList<String> parseCommand = new ArrayList<String>(Arrays.asList(splitCommand));
 
         MainReader mainReader = MainReader.getInstance();
-        boolean excepted = mainReader.initMainCommand(command);
+        boolean excepted = mainReader.readCommand(parseCommand);
 
         Assert.assertFalse(excepted);
     }
@@ -70,9 +87,11 @@ public class MainReaderTest {
     @Test
     public void testFourVendorAddCommandInvalid() {
         String command = "add vendor -n test_name -u";
+        String[] splitCommand = command.split("\\s");
+        ArrayList<String> parseCommand = new ArrayList<String>(Arrays.asList(splitCommand));
 
         MainReader mainReader = MainReader.getInstance();
-        boolean excepted = mainReader.initMainCommand(command);
+        boolean excepted = mainReader.readCommand(parseCommand);
 
         Assert.assertFalse(excepted);
     }
@@ -81,9 +100,11 @@ public class MainReaderTest {
     @Test
     public void testOneVendorRemoveCommandInvalid() {
         String command = "remove vendor -n";
+        String[] splitCommand = command.split("\\s");
+        ArrayList<String> parseCommand = new ArrayList<String>(Arrays.asList(splitCommand));
 
         MainReader mainReader = MainReader.getInstance();
-        boolean excepted = mainReader.initMainCommand(command);
+        boolean excepted = mainReader.readCommand(parseCommand);
 
         Assert.assertFalse(excepted);
     }
@@ -91,9 +112,11 @@ public class MainReaderTest {
     @Test
     public void testTwoVendorRemoveCommandInvalid() {
         String command = "remove vendor";
+        String[] splitCommand = command.split("\\s");
+        ArrayList<String> parseCommand = new ArrayList<String>(Arrays.asList(splitCommand));
 
         MainReader mainReader = MainReader.getInstance();
-        boolean excepted = mainReader.initMainCommand(command);
+        boolean excepted = mainReader.readCommand(parseCommand);
 
         Assert.assertFalse(excepted);
     }
@@ -102,9 +125,11 @@ public class MainReaderTest {
     @Test
     public void testOneVendorShowCommandInvalid() {
         String command = "show vendor -n";
+        String[] splitCommand = command.split("\\s");
+        ArrayList<String> parseCommand = new ArrayList<String>(Arrays.asList(splitCommand));
 
         MainReader mainReader = MainReader.getInstance();
-        boolean excepted = mainReader.initMainCommand(command);
+        boolean excepted = mainReader.readCommand(parseCommand);
 
         Assert.assertFalse(excepted);
     }
@@ -112,25 +137,11 @@ public class MainReaderTest {
     @Test
     public void testTwoVendorShowCommandInvalid() {
         String command = "show";
+        String[] splitCommand = command.split("\\s");
+        ArrayList<String> parseCommand = new ArrayList<String>(Arrays.asList(splitCommand));
 
         MainReader mainReader = MainReader.getInstance();
-        boolean excepted = mainReader.initMainCommand(command);
-
-        Assert.assertFalse(excepted);
-    }
-
-    // No vendor to remove
-    @Test
-    public void testNoVendorToRemove() {
-        String command = "add vendor -n test_name -u test_utility";
-        String command2 = "remove vendor -n test";
-        boolean excepted = false;
-
-        MainReader mainReader = MainReader.getInstance();
-        boolean exceptedNoCheck = mainReader.initMainCommand(command);
-        if (exceptedNoCheck) {
-            excepted = mainReader.initMainCommand(command2);
-        }
+        boolean excepted = mainReader.readCommand(parseCommand);
 
         Assert.assertFalse(excepted);
     }

@@ -3,6 +3,7 @@ package com.mateusz.service;
 import com.mateusz.api.VendorDao;
 import com.mateusz.api.VendorService;
 import com.mateusz.dao.VendorDaoImpl;
+import com.mateusz.exception.VendorAlreadyExistException;
 import com.mateusz.exception.VendorToRemoveNotExistException;
 import com.mateusz.model.Vendor;
 
@@ -21,10 +22,10 @@ public class VendorServiceImpl implements VendorService {
     }
 
     @Override
-    public boolean addVendor(Vendor vendor) {
-        //if (isVendorAlreadyExist(vendor.getName())) {
-            // TODO: exception
-        //}
+    public boolean addVendor(Vendor vendor) throws VendorAlreadyExistException {
+        if (isVendorAlreadyExist(vendor.getName())) {
+            throw new VendorAlreadyExistException("Vendor name already exist!");
+        }
         vendorDao.addVendor(vendor);
         return true;
     }

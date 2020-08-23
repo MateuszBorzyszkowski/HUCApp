@@ -3,6 +3,7 @@ package com.mateusz.reader;
 import com.mateusz.api.VendorService;
 import com.mateusz.enums.VendorOption;
 import com.mateusz.exception.CommandNotRecognizedException;
+import com.mateusz.exception.VendorAlreadyExistException;
 import com.mateusz.exception.VendorToRemoveNotExistException;
 import com.mateusz.model.Vendor;
 import com.mateusz.service.VendorServiceImpl;
@@ -24,11 +25,11 @@ public class VendorReader {
         return instance;
     }
 
-    public boolean initVendorCommand(ArrayList<String> command, VendorOption option) throws CommandNotRecognizedException {
+    public boolean initVendorCommand(ArrayList<String> command, VendorOption option) throws CommandNotRecognizedException, VendorToRemoveNotExistException, VendorAlreadyExistException {
         return vendorCommand(command, option);
     }
 
-    private boolean vendorCommand(ArrayList<String> command, VendorOption option) throws CommandNotRecognizedException {
+    private boolean vendorCommand(ArrayList<String> command, VendorOption option) throws CommandNotRecognizedException, VendorToRemoveNotExistException, VendorAlreadyExistException {
         String name = null;
         String utility = null;
         String s = null;
@@ -50,24 +51,18 @@ public class VendorReader {
                 default:
                     throw new CommandNotRecognizedException("Parameter '" + s + "' not recognized! Type 'help' command to more information.");
             }
-
         }
         return runVendorOption(name, utility, option);
     }
 
-    private boolean runVendorOption(String name, String utility, VendorOption option) {
+    private boolean runVendorOption(String name, String utility, VendorOption option) throws VendorToRemoveNotExistException, VendorAlreadyExistException {
             switch (option) {
                 case ADD:
                     vendorService.addVendor(new Vendor(name, utility));
                     return true;
                 case REMOVE:
-                    try {
-                        vendorService.removeVendorByName(name);
-                        return true;
-                    } catch (VendorToRemoveNotExistException e) {
-                        e.printStackTrace();
-                    }
-                    return false;
+                    vendorService.removeVendorByName(name);
+                    return true;
                 case SHOW:
                     for (Vendor vendor : vendorService.getAllVendors()) {
                         System.out.println(vendor.getName() + " (" + vendor.getUtility() + ")");
