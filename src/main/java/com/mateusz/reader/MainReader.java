@@ -23,38 +23,37 @@ public class MainReader {
     }
 
     public boolean initMainCommand(String command) {
-        try {
-            if (command.equals("exit")) {
-                return false;
-            } else {
-                return readCommand(command);
-            }
-        } catch (CommandNotRecognizedException e) {
-            e.printStackTrace();
-        } catch (CountOfCommandsNotEnoughException e) {
-            e.printStackTrace();
-        }
-        return true;
-    }
-
-    private boolean readCommand(String command) throws CommandNotRecognizedException, CountOfCommandsNotEnoughException {
         String[] splitCommand = command.split("\\s");
-
         ArrayList<String> parseCommand = new ArrayList<String>(Arrays.asList(splitCommand));
 
-        if (readerValidator.mainReaderValidate(parseCommand.size(), parseCommand.get(0))) {
-            switch (parseCommand.get(0)) {
+        if (!parseCommand.get(0).equals("exit")) {
+            try {
+                return readCommand(parseCommand);
+            } catch (CommandNotRecognizedException e) {
+                e.printStackTrace();
+            } catch (CountOfCommandsNotEnoughException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+
+    private boolean readCommand(ArrayList<String> command) throws CommandNotRecognizedException, CountOfCommandsNotEnoughException {
+
+        if (readerValidator.mainReaderValidate(command.size(), command.get(0))) {
+            switch (command.get(0)) {
                 case "add":
-                    return addCommand(parseCommand);
+                    return addCommand(command);
                 case "remove":
-                    return removeCommand(parseCommand);
+                    return removeCommand(command);
                 case "show":
-                    return showCommand(parseCommand);
+                    return showCommand(command);
                 case "help":
                     System.out.println("Help");
                     return true;
                 default:
-                    throw new CommandNotRecognizedException("Command '" + parseCommand.get(0) + "' not recognized. Type 'help' command to more information.");
+                    throw new CommandNotRecognizedException("Command '" + command.get(0) + "' not recognized. Type 'help' command to more information.");
             }
         } else {
             throw new CountOfCommandsNotEnoughException("Number of commands is not enough! Type 'help' command to more information.");
