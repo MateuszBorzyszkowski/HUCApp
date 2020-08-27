@@ -1,7 +1,6 @@
 package com.mateusz.model;
 
 public class Place {
-    private int id;
     private String name;
     private String street;
     private String homeNumber;
@@ -9,22 +8,13 @@ public class Place {
     private String postalCode;
     private String city;
 
-    public Place(int id, String name, String street, String homeNumber, String apartmentNumber, String postalCode, String city) {
-        this.id = id;
+    public Place(String name, String street, String homeNumber, String apartmentNumber, String postalCode, String city) {
         this.name = name;
         this.street = street;
         this.homeNumber = homeNumber;
         this.apartmentNumber = apartmentNumber;
         this.postalCode = postalCode;
         this.city = city;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {

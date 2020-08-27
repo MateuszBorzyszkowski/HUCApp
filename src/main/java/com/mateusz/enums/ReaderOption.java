@@ -1,6 +1,6 @@
 package com.mateusz.enums;
 
-public enum VendorOption {
+public enum ReaderOption {
     ADD,
     REMOVE,
     SHOW;

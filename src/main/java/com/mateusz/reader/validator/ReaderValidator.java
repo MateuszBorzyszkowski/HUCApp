@@ -1,6 +1,6 @@
 package com.mateusz.reader.validator;
 
-import com.mateusz.enums.VendorOption;
+import com.mateusz.enums.ReaderOption;
 
 public class ReaderValidator {
     private static ReaderValidator instance = null;
@@ -15,22 +15,42 @@ public class ReaderValidator {
         return instance;
     }
 
-    public boolean mainReaderValidate(int count, String command){
+    public boolean readerValidate(int count, String command){
         return isExitOrHelpOption(command) || count > 1;
     }
 
-    public boolean mainReaderValidate(int count, VendorOption option) {
-        if (option == VendorOption.ADD) {
+    public boolean readerValidate(int count, ReaderOption option, String parameter) {
+        if (parameter.equals("vendor")){
+            return vendorValidate(count, option);
+        } else if (parameter.equals("place")) {
+            return placeValidate(count, option);
+        }
+        return false;
+    }
+
+    private boolean vendorValidate(int count, ReaderOption option){
+        if (option == ReaderOption.ADD) {
             return count == 5;
-        } else if (option == VendorOption.REMOVE) {
+        } else if (option == ReaderOption.REMOVE) {
             return count == 3;
-        } else if (option == VendorOption.SHOW) {
+        } else if (option == ReaderOption.SHOW) {
+            return count == 1;
+        }
+        return false;
+    }
+
+    private boolean placeValidate(int count, ReaderOption option){
+        if (option == ReaderOption.ADD) {
+            return count == 10;
+        } else if (option == ReaderOption.REMOVE) {
+            return count == 3;
+        } else if (option == ReaderOption.SHOW) {
             return count == 1;
         }
         return false;
     }
 
     private boolean isExitOrHelpOption (String command) {
-        return command.equals("help") || command.equals("exit");
+        return command.equals("help");
     }
 }

@@ -1,10 +1,11 @@
 package com.mateusz.reader;
 
-import com.mateusz.enums.VendorOption;
+import com.mateusz.enums.ReaderOption;
 import com.mateusz.exception.CommandNotRecognizedException;
-import com.mateusz.exception.CountOfCommandsNotEnoughException;
-import com.mateusz.exception.VendorAlreadyExistException;
-import com.mateusz.exception.VendorToRemoveNotExistException;
+import com.mateusz.exception.CountOfCommandsIsInvalidException;
+import com.mateusz.exception.NameInDatabaseAlreadyExistException;
+import com.mateusz.exception.NameToRemoveNotExistInDatabaseException;
+import com.mateusz.reader.parser.ReaderParser;
 import com.mateusz.reader.validator.ReaderValidator;
 
 import java.util.*;
@@ -12,7 +13,8 @@ import java.util.*;
 public class MainReader {
     private static MainReader instance = null;
     private final ReaderValidator readerValidator = ReaderValidator.getInstance();
-    private final VendorReader vendorReader = VendorReader.getInstance();
+    private final ReaderParser readerParser = ReaderParser.getInstance();
+    private final ActionReader actionReader = ActionReader.getInstance();
 
     private MainReader() {
     }
@@ -25,8 +27,7 @@ public class MainReader {
     }
 
     public boolean initMainCommand(String command) {
-        String[] splitCommand = command.split("\\s");
-        ArrayList<String> parseCommand = new ArrayList<String>(Arrays.asList(splitCommand));
+        ArrayList<String> parseCommand = readerParser.initParser(command);
 
         if (parseCommand.get(0).equals("exit")) {
             return false;
@@ -36,85 +37,52 @@ public class MainReader {
         }
     }
 
-
     public boolean readCommand(ArrayList<String> command) {
 
         try {
-            if (readerValidator.mainReaderValidate(command.size(), command.get(0))) {
+            if (readerValidator.readerValidate(command.size(), command.get(0))) {
                 switch (command.get(0)) {
                     case "add":
-                        return addCommand(command);
+                        return runCommand(command, ReaderOption.ADD);
                     case "remove":
-                        return removeCommand(command);
+                        return runCommand(command, ReaderOption.REMOVE);
                     case "show":
-                        return showCommand(command);
+                        return runCommand(command, ReaderOption.SHOW);
                     case "help":
                         System.out.println("Help");
+                        return true;
                     default:
                         throw new CommandNotRecognizedException("Command '" + command.get(0) + "' not recognized. Type 'help' command to more information.");
                 }
             } else {
-                throw new CountOfCommandsNotEnoughException("Number of commands is not enough! Type 'help' command to more information.");
+                throw new CountOfCommandsIsInvalidException("Number of commands is invalid! Type 'help' command to more information.");
             }
         } catch (CommandNotRecognizedException e) {
             e.printStackTrace();
-        } catch (CountOfCommandsNotEnoughException e) {
+        } catch (CountOfCommandsIsInvalidException e) {
             e.printStackTrace();
-        } catch (VendorToRemoveNotExistException e) {
+        } catch (NameToRemoveNotExistInDatabaseException e) {
             e.printStackTrace();
-        } catch (VendorAlreadyExistException e) {
+        } catch (NameInDatabaseAlreadyExistException e) {
             e.printStackTrace();
         }
         return false;
     }
 
-    private boolean addCommand(ArrayList<String> command) throws CommandNotRecognizedException, CountOfCommandsNotEnoughException, VendorToRemoveNotExistException, VendorAlreadyExistException {
+    private boolean runCommand(ArrayList<String> command, ReaderOption option) throws CommandNotRecognizedException, CountOfCommandsIsInvalidException, NameToRemoveNotExistInDatabaseException, NameInDatabaseAlreadyExistException {
         command.remove(0);
 
-        if (readerValidator.mainReaderValidate(command.size(), VendorOption.ADD)) {
+        if (readerValidator.readerValidate(command.size(), option, command.get(0))) {
             switch (command.get(0)) {
                 case "vendor":
-                    return vendorReader.initVendorCommand(command, VendorOption.ADD);
                 case "place":
+                    return actionReader.initActionCommand(command, option);
                 default:
                     throw new CommandNotRecognizedException("Command '" + command.get(0) + "' for 'add' option not recognized! Type 'help' command to more information.");
             }
         } else {
-            throw new CountOfCommandsNotEnoughException("Number of commands is not enough! Type 'help' command to more information.");
+            throw new CountOfCommandsIsInvalidException("Number of commands is invalid! Type 'help' command to more information.");
         }
 
-    }
-
-    private boolean removeCommand(ArrayList<String> command) throws CommandNotRecognizedException, CountOfCommandsNotEnoughException, VendorToRemoveNotExistException, VendorAlreadyExistException {
-        command.remove(0);
-
-        if (readerValidator.mainReaderValidate(command.size(), VendorOption.REMOVE)) {
-            switch (command.get(0)) {
-                case "vendor":
-                    return vendorReader.initVendorCommand(command, VendorOption.REMOVE);
-                case "place":
-                default:
-                    throw new CommandNotRecognizedException("Command '" + command.get(0) + "' for 'remove' option not recognized! Type 'help' command to more information.");
-            }
-        } else {
-            throw new CountOfCommandsNotEnoughException("Number of commands is not enough! Type 'help' command to more information.");
-        }
-
-    }
-
-    private boolean showCommand(ArrayList<String> command) throws CommandNotRecognizedException, CountOfCommandsNotEnoughException, VendorToRemoveNotExistException, VendorAlreadyExistException {
-        command.remove(0);
-
-        if (readerValidator.mainReaderValidate(command.size(), VendorOption.SHOW)) {
-            switch (command.get(0)) {
-                case "vendor":
-                    return vendorReader.initVendorCommand(command, VendorOption.SHOW);
-                case "place":
-                default:
-                    throw new CommandNotRecognizedException("Command '" + command.get(0) + "' for 'show' option not recognized! Type 'help' command to more information.");
-            }
-        } else {
-            throw new CountOfCommandsNotEnoughException("Number of commands is not enough! Type 'help' command to more information.");
-        }
     }
 }

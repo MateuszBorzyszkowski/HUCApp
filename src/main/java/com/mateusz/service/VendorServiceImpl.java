@@ -3,8 +3,8 @@ package com.mateusz.service;
 import com.mateusz.api.VendorDao;
 import com.mateusz.api.VendorService;
 import com.mateusz.dao.VendorDaoImpl;
-import com.mateusz.exception.VendorAlreadyExistException;
-import com.mateusz.exception.VendorToRemoveNotExistException;
+import com.mateusz.exception.NameInDatabaseAlreadyExistException;
+import com.mateusz.exception.NameToRemoveNotExistInDatabaseException;
 import com.mateusz.model.Vendor;
 
 import java.util.List;
@@ -22,33 +22,20 @@ public class VendorServiceImpl implements VendorService {
     }
 
     @Override
-    public boolean addVendor(Vendor vendor) throws VendorAlreadyExistException {
+    public void addVendor(Vendor vendor) throws NameInDatabaseAlreadyExistException {
         if (isVendorAlreadyExist(vendor.getName())) {
-            throw new VendorAlreadyExistException("Vendor name already exist!");
+            throw new NameInDatabaseAlreadyExistException("Vendor name already exist!");
         }
         vendorDao.addVendor(vendor);
-        return true;
     }
 
     @Override
-    public void removeVendorByName(String vendorName) throws VendorToRemoveNotExistException {
+    public void removeVendorByName(String vendorName) throws NameToRemoveNotExistInDatabaseException {
         if (isVendorAlreadyExist(vendorName)) {
             vendorDao.removeVendorByName(vendorName);
         } else {
-            throw new VendorToRemoveNotExistException("No vendor in the database!");
+            throw new NameToRemoveNotExistInDatabaseException("No vendor in the database!");
         }
-    }
-
-    @Override
-    public Vendor getVendorByName(String vendorName) {
-        List<Vendor> vendors = getAllVendors();
-
-        for (Vendor vendor : vendors) {
-            if (vendor.getName().equals(vendorName)) {
-                return vendor;
-            }
-        }
-        return null;
     }
 
     @Override
@@ -60,5 +47,16 @@ public class VendorServiceImpl implements VendorService {
         Vendor vendor = getVendorByName(vendorName);
 
         return vendor != null;
+    }
+
+    private Vendor getVendorByName(String vendorName) {
+        List<Vendor> vendors = getAllVendors();
+
+        for (Vendor vendor : vendors) {
+            if (vendor.getName().equals(vendorName)) {
+                return vendor;
+            }
+        }
+        return null;
     }
 }

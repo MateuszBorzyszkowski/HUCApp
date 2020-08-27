@@ -1,7 +1,5 @@
 package com.mateusz.reader;
 
-import com.mateusz.exception.CommandNotRecognizedException;
-import com.mateusz.exception.CountOfCommandsNotEnoughException;
 import org.junit.Assert;
 import org.junit.Test;
 
