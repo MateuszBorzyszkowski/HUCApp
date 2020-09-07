@@ -8,6 +8,7 @@ import com.mateusz.exception.NameInDatabaseAlreadyExistException;
 import com.mateusz.exception.NameToRemoveNotExistInDatabaseException;
 import com.mateusz.model.Place;
 import com.mateusz.model.Vendor;
+import com.mateusz.reader.parser.ReaderParser;
 import com.mateusz.service.PlaceServiceImpl;
 import com.mateusz.service.VendorServiceImpl;
 
@@ -18,6 +19,7 @@ public class ActionReader {
     private static ActionReader instance = null;
     private final VendorService vendorService = VendorServiceImpl.getInstance();
     private final PlaceService placeService = PlaceServiceImpl.getInstance();
+    private final ReaderParser readerParser = ReaderParser.getInstance();
 
     private ActionReader() {
     }
@@ -34,7 +36,7 @@ public class ActionReader {
     }
 
     private boolean actionCommand(ArrayList<String> command, ReaderOption option) throws CommandNotRecognizedException, NameToRemoveNotExistInDatabaseException, NameInDatabaseAlreadyExistException {
-        String address = null;
+        StringBuilder address = new StringBuilder();
         String city = null;
         String name = null;
         String utility = null;
@@ -49,7 +51,9 @@ public class ActionReader {
             switch (s) {
                 case "-address":
                 case "-a":
-                    address = iter.next();
+                    address.append(iter.next());
+                    address.append(" ");
+                    address.append(iter.next());
                     break;
                 case "-city":
                 case "-c":
@@ -73,12 +77,13 @@ public class ActionReader {
         }
 
         if (parameter.equals("vendor")) {
-            //TODO: add parser for vendors and get place object to runVendorOption
             Vendor vendor = new Vendor(name, utility);
             return runVendorOption(vendor, option);
         } else if (parameter.equals("place")) {
-            //TODO: add parser for places and get place object to runPlaceOption
-            Place place = null;
+            Place place = new Place(name, null, null, postcode, city);
+            if (option.equals(ReaderOption.ADD)) {
+                place = readerParser.splitAddress(place, address.toString());
+            }
             return runPlaceOption(place, option);
         }
         return false;
@@ -112,8 +117,8 @@ public class ActionReader {
                 return true;
             case SHOW:
                 //TODO: return via toString()
-                for (Place place1 : placeService.getAllPlaces()) {
-                    System.out.println(place1.getName() + " (" + place1.getStreet() + ")");
+                for (Place p : placeService.getAllPlaces()) {
+                    System.out.println(p.getName() + " (" + p.getStreet() + ")");
                 }
                 return true;
         }

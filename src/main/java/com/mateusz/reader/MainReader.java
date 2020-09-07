@@ -27,7 +27,7 @@ public class MainReader {
     }
 
     public boolean initMainCommand(String command) {
-        ArrayList<String> parseCommand = readerParser.initParser(command);
+        ArrayList<String> parseCommand = readerParser.splitCommand(command, "\\s");
 
         if (parseCommand.get(0).equals("exit")) {
             return false;

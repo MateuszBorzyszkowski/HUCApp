@@ -1,5 +1,7 @@
 package com.mateusz.reader.parser;
 
+import com.mateusz.model.Place;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -16,11 +18,19 @@ public class ReaderParser {
         return instance;
     }
 
-    public ArrayList<String> initParser(String command) {
-        String[] splitCommand = command.split("\\s");
-        ArrayList<String> parseCommand = new ArrayList<String>(Arrays.asList(splitCommand));
+    public ArrayList<String> splitCommand(String command, String regex) {
+        String[] splitCommand = command.split(regex);
 
-        return parseCommand;
+        return new ArrayList<String>(Arrays.asList(splitCommand));
     }
 
+    public Place splitAddress(Place place, String command) {
+        ArrayList<String> splitCommand = splitCommand(command, "\\s");
+
+        place.setStreet(splitCommand.get(0));
+        splitCommand.remove(0);
+        place.setHomeNumber(splitCommand.get(0));
+
+        return place;
+    }
 }

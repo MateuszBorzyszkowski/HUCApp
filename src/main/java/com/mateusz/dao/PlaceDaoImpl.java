@@ -26,13 +26,12 @@ public class PlaceDaoImpl implements PlaceDao {
         int addr_id = 0;
 
         try {
-            String addressQuery = "insert into address (street, home_number, apartment_number, postal_code, city) values (?,?,?,?,?)";
+            String addressQuery = "insert into address (street, home_number, postal_code, city) values (?,?,?,?)";
             statement = connection.prepareStatement(addressQuery);
             statement.setString(1, place.getStreet());
             statement.setString(2, place.getHomeNumber());
-            statement.setString(3, place.getApartmentNumber());
-            statement.setString(4, place.getPostalCode());
-            statement.setString(5, place.getCity());
+            statement.setString(3, place.getPostalCode());
+            statement.setString(4, place.getCity());
             statement.execute();
 
             ResultSet resultSet = statement.getGeneratedKeys();
@@ -117,17 +116,18 @@ public class PlaceDaoImpl implements PlaceDao {
                     if (addressResultSet.next()) {
                         String street = addressResultSet.getString("street");
                         String homeNumber = addressResultSet.getString("home_number");
-                        String apartmentNumber = addressResultSet.getString("apartment_number");
                         String code = addressResultSet.getString("postal_code");
                         String city = addressResultSet.getString("city");
 
-                        Place place = new Place(placeName, street, homeNumber, apartmentNumber, code, city);
+                        Place place = new Place(placeName, street, homeNumber, code, city);
                         places.add(place);
                     }
                 }
             }
             statement.close();
-            preparedStatement.close();
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
