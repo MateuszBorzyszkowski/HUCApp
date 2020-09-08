@@ -6,7 +6,7 @@ drop table if exists settlement;
 create table if not exists vendor (
     id integer primary key autoincrement,
     vendor_name text not null,
-    utility text not null
+    service text not null
 );
 
 create table if not exists address (
@@ -30,7 +30,7 @@ create table if not exists settlement (
     meter_status real not null,
     date_start text not null,
     date_end text not null,
-    utility_id integer not null,
+    service_id integer not null,
     place_id integer not null,
     foreign key (place_id) references place (id)
 );

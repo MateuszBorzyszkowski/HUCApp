@@ -2,11 +2,11 @@ package com.mateusz.model;
 
 public class Vendor {
     private String name;
-    private String utility;
+    private String service;
 
-    public Vendor(String name, String utility) {
+    public Vendor(String name, String service) {
         this.name = name;
-        this.utility = utility;
+        this.service = service;
     }
 
     public String getName() {
@@ -17,11 +17,11 @@ public class Vendor {
         this.name = name;
     }
 
-    public String getUtility() {
-        return utility;
+    public String getService() {
+        return service;
     }
 
-    public void setUtility(String utility) {
-        this.utility = utility;
+    public void setService(String service) {
+        this.service = service;
     }
 }

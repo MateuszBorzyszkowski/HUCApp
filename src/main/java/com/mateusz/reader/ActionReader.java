@@ -39,7 +39,7 @@ public class ActionReader {
         StringBuilder address = new StringBuilder();
         String city = null;
         String name = null;
-        String utility = null;
+        String service = null;
         String postcode = null;
 
         String parameter = command.get(0);
@@ -63,9 +63,9 @@ public class ActionReader {
                 case "-n":
                     name = iter.next();
                     break;
-                case "-utility":
-                case "-u":
-                    utility = iter.next();
+                case "-service":
+                case "-s":
+                    service = iter.next();
                     break;
                 case "-postcode":
                 case "-p":
@@ -77,7 +77,7 @@ public class ActionReader {
         }
 
         if (parameter.equals("vendor")) {
-            Vendor vendor = new Vendor(name, utility);
+            Vendor vendor = new Vendor(name, service);
             return runVendorOption(vendor, option);
         } else if (parameter.equals("place")) {
             Place place = new Place(name, null, null, postcode, city);
@@ -100,7 +100,7 @@ public class ActionReader {
                 case SHOW:
                     //TODO: return via toString()
                     for (Vendor v : vendorService.getAllVendors()) {
-                        System.out.println(v.getName() + " (" + v.getUtility() + ")");
+                        System.out.println(v.getName() + " (" + v.getService() + ")");
                     }
                     return true;
             }

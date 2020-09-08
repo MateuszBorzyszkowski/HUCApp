@@ -7,7 +7,7 @@ description:
     add
         vendor
             -name, -n
-            -utility, -u
+            -service, -s
 
     remove
         vendor
@@ -19,6 +19,6 @@ description:
     exit
 
 Example:
-$ add vendor -name nameOfVendor -utility gas
+$ add vendor -name nameOfVendor -service gas
 $ remove vendor -name nameOfVendor
 

@@ -24,10 +24,10 @@ public class VendorDaoImpl implements VendorDao {
         PreparedStatement statement;
 
         try {
-            String query = "insert into vendor (vendor_name, utility) values (?,?)";
+            String query = "insert into vendor (vendor_name, service) values (?,?)";
             statement = connection.prepareStatement(query);
             statement.setString(1, vendor.getName());
-            statement.setString(2, vendor.getUtility());
+            statement.setString(2, vendor.getService());
             statement.execute();
             statement.close();
         } catch (SQLException e) {
@@ -62,9 +62,9 @@ public class VendorDaoImpl implements VendorDao {
 
             while (resultSet.next()) {
                 String vendorName = resultSet.getString("vendor_name");
-                String utility = resultSet.getString("utility");
+                String service = resultSet.getString("service");
 
-                Vendor vendor = new Vendor(vendorName, utility);
+                Vendor vendor = new Vendor(vendorName, service);
                 vendors.add(vendor);
             }
             statement.close();
