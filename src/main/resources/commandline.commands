@@ -8,13 +8,21 @@ description:
         vendor
             -name, -n
             -service, -s
+        place
+            -name, -n
+            -address, -a
+            -postcode, -p
+            -city, -c
 
     remove
         vendor
             -name, -n
+        place
+            -name, -n
 
     show
         vendor
+        place
 
     exit
 

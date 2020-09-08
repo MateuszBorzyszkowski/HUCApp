@@ -37,6 +37,7 @@ public class MainReader {
         }
     }
 
+    // TODO: one output from method
     public boolean readCommand(ArrayList<String> command) {
 
         try {
@@ -76,6 +77,7 @@ public class MainReader {
             switch (command.get(0)) {
                 case "vendor":
                 case "place":
+                case "settlement":
                     return actionReader.initActionCommand(command, option);
                 default:
                     throw new CommandNotRecognizedException("Command '" + command.get(0) + "' for 'add' option not recognized! Type 'help' command to more information.");

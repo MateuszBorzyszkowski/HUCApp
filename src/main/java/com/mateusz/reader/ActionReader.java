@@ -7,6 +7,7 @@ import com.mateusz.exception.CommandNotRecognizedException;
 import com.mateusz.exception.NameInDatabaseAlreadyExistException;
 import com.mateusz.exception.NameToRemoveNotExistInDatabaseException;
 import com.mateusz.model.Place;
+import com.mateusz.model.Settlement;
 import com.mateusz.model.Vendor;
 import com.mateusz.reader.parser.ReaderParser;
 import com.mateusz.service.PlaceServiceImpl;
@@ -35,12 +36,17 @@ public class ActionReader {
         return actionCommand(command, option);
     }
 
+    // TODO: one output from method
     private boolean actionCommand(ArrayList<String> command, ReaderOption option) throws CommandNotRecognizedException, NameToRemoveNotExistInDatabaseException, NameInDatabaseAlreadyExistException {
         StringBuilder address = new StringBuilder();
         String city = null;
         String name = null;
         String service = null;
         String postcode = null;
+        String placeName = null;
+        String vendorName = null;
+        String meterStatus = null;
+        String date = null;
 
         String parameter = command.get(0);
         command.remove(0);
@@ -59,6 +65,14 @@ public class ActionReader {
                 case "-c":
                     city = iter.next();
                     break;
+                case "-date":
+                case "-d":
+                    date = iter.next();
+                    break;
+                case "-meter_status":
+                case "-ms":
+                    meterStatus = iter.next();
+                    break;
                 case "-name":
                 case "-n":
                     name = iter.next();
@@ -70,6 +84,14 @@ public class ActionReader {
                 case "-postcode":
                 case "-p":
                     postcode = iter.next();
+                    break;
+                case "-place_name":
+                case "-pn":
+                    placeName = iter.next();
+                    break;
+                case "-vendor_name":
+                case "-vn":
+                    vendorName = iter.next();
                     break;
                 default:
                     throw new CommandNotRecognizedException("Parameter '" + s + "' not recognized! Type 'help' command to more information.");
@@ -85,10 +107,14 @@ public class ActionReader {
                 place = readerParser.splitAddress(place, address.toString());
             }
             return runPlaceOption(place, option);
+        } else if (parameter.equals("settlement")) {
+            Settlement settlement = new Settlement(vendorName, placeName, meterStatus, date);
+            return runSettlementOption(settlement, option);
         }
         return false;
     }
 
+    // TODO: one output from method
     private boolean runVendorOption(Vendor vendor, ReaderOption option) throws NameToRemoveNotExistInDatabaseException, NameInDatabaseAlreadyExistException {
             switch (option) {
                 case ADD:
@@ -107,6 +133,7 @@ public class ActionReader {
             return false;
     }
 
+    // TODO: one output from method
     private boolean runPlaceOption(Place place, ReaderOption option) throws NameToRemoveNotExistInDatabaseException, NameInDatabaseAlreadyExistException {
         switch (option) {
             case ADD:
@@ -122,6 +149,11 @@ public class ActionReader {
                 }
                 return true;
         }
+        return false;
+    }
+
+    // TODO: one output from method
+    private boolean runSettlementOption(Settlement settlement, ReaderOption option) {
         return false;
     }
 }
