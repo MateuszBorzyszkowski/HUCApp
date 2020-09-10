@@ -35,12 +35,11 @@ public class ActionReader {
         return instance;
     }
 
-    public boolean initActionCommand(ArrayList<String> command, ReaderOption option) throws CommandNotRecognizedException, NameToRemoveNotExistInDatabaseException, NameInDatabaseAlreadyExistException {
-        return actionCommand(command, option);
+    public void initActionCommand(ArrayList<String> command, ReaderOption option) throws CommandNotRecognizedException, NameToRemoveNotExistInDatabaseException, NameInDatabaseAlreadyExistException {
+        actionCommand(command, option);
     }
 
-    // TODO: one output from method
-    private boolean actionCommand(ArrayList<String> command, ReaderOption option) throws CommandNotRecognizedException, NameToRemoveNotExistInDatabaseException, NameInDatabaseAlreadyExistException {
+    private void actionCommand(ArrayList<String> command, ReaderOption option) throws CommandNotRecognizedException, NameToRemoveNotExistInDatabaseException, NameInDatabaseAlreadyExistException {
         StringBuilder address = new StringBuilder();
         String city = null;
         String name = null;
@@ -117,27 +116,23 @@ public class ActionReader {
                 Settlement settlement = new Settlement(vendorName, placeName, meterStatus, date);
                 runSettlementOption(settlement, option);
                 break;
-            default:
-                return false;
         }
-        return true;
     }
 
     private void runVendorOption(Vendor vendor, ReaderOption option) throws NameToRemoveNotExistInDatabaseException, NameInDatabaseAlreadyExistException {
-            switch (option) {
-                case ADD:
-                    vendorService.addVendor(vendor);
-                    break;
-                case REMOVE:
-                    vendorService.removeVendorByName(vendor.getName());
-                    break;
-                case SHOW:
-                    //TODO: return via toString()
-                    for (Vendor v : vendorService.getAllVendors()) {
-                        System.out.println(v.getName() + " (" + v.getService() + ")");
-                    }
-                    break;
-            }
+        switch (option) {
+            case ADD:
+                vendorService.addVendor(vendor);
+                break;
+            case REMOVE:
+                vendorService.removeVendorByName(vendor.getName());
+                break;
+            case SHOW:
+                for (Vendor v : vendorService.getAllVendors()) {
+                    System.out.println(v.toString());
+                }
+                break;
+        }
     }
 
     private void runPlaceOption(Place place, ReaderOption option) throws NameToRemoveNotExistInDatabaseException, NameInDatabaseAlreadyExistException {
@@ -149,14 +144,13 @@ public class ActionReader {
                 placeService.removePlaceByName(place.getName());
                 break;
             case SHOW:
-                //TODO: return via toString()
                 for (Place p : placeService.getAllPlaces()) {
-                    System.out.println(p.getName() + " (" + p.getStreet() + ")");
+                    System.out.println(p.toString());
                 }
                 break;
         }
     }
-    
+
     private void runSettlementOption(Settlement settlement, ReaderOption option) {
         switch (option) {
             case ADD:

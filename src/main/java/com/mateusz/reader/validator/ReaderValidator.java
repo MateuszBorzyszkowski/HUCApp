@@ -1,6 +1,8 @@
 package com.mateusz.reader.validator;
 
 import com.mateusz.enums.ReaderOption;
+import com.mateusz.exception.CommandNotRecognizedException;
+import com.mateusz.exception.CountOfCommandsIsInvalidException;
 
 public class ReaderValidator {
     private static ReaderValidator instance = null;
@@ -15,55 +17,69 @@ public class ReaderValidator {
         return instance;
     }
 
-    public boolean readerValidate(int count, String command){
-        return isExitOrHelpOption(command) || count > 1;
-    }
-
     public boolean readerValidate(int count, ReaderOption option, String parameter) {
-        if (parameter.equals("vendor")){
-            return vendorValidate(count, option);
-        } else if (parameter.equals("place")) {
-            return placeValidate(count, option);
-        } else if (parameter.equals("settlement")) {
-            return settlementValidate(count, option);
+        boolean status = false;
+        try {
+            switch (parameter) {
+                case "vendor":
+                    status = vendorValidate(count, option);
+                    break;
+                case "place":
+                    status = placeValidate(count, option);
+                    break;
+                case "settlement":
+                    status = settlementValidate(count, option);
+                    break;
+                default:
+                    throw new CommandNotRecognizedException("Command '" + parameter + "' for option not recognized! Type 'help' command to more information.");
+            }
+            if (!status) {
+                throw new CountOfCommandsIsInvalidException("Number of commands is invalid! Type 'help' command to more information.");
+            }
+        } catch (CommandNotRecognizedException e) {
+            e.printStackTrace();
+        } catch (CountOfCommandsIsInvalidException e) {
+            e.printStackTrace();
         }
-        return false;
+        return status;
     }
 
-    private boolean vendorValidate(int count, ReaderOption option){
-        if (option == ReaderOption.ADD) {
-            return count == 5;
-        } else if (option == ReaderOption.REMOVE) {
-            return count == 3;
-        } else if (option == ReaderOption.SHOW) {
-            return count == 1;
+    private boolean vendorValidate(int count, ReaderOption option) {
+        boolean status = false;
+        switch (option) {
+            case ADD:
+                status = count == 5;
+            case REMOVE:
+                status = count == 3;
+            case SHOW:
+                status = count == 1;
         }
-        return false;
+        return status;
     }
 
     private boolean placeValidate(int count, ReaderOption option){
-        if (option == ReaderOption.ADD) {
-            return count == 10;
-        } else if (option == ReaderOption.REMOVE) {
-            return count == 3;
-        } else if (option == ReaderOption.SHOW) {
-            return count == 1;
+        boolean status = false;
+        switch (option) {
+            case ADD:
+                status = count == 10;
+            case REMOVE:
+                status = count == 3;
+            case SHOW:
+                status = count == 1;
         }
-        return false;
+        return status;
     }
 
     private boolean settlementValidate(int count, ReaderOption option){
-        if (option == ReaderOption.ADD) {
-            return count == 9;
-        } else if (option == ReaderOption.REMOVE) {
-            return count == 2;
-        } else if (option == ReaderOption.SHOW) {
-            return count == 1;
+        boolean status = false;
+        switch (option) {
+            case ADD:
+                status = count == 9;
+            case REMOVE:
+                status = count == 3;
+            case SHOW:
+                status = count == 1;
         }
-        return false;
-    }
-
-    private boolean isExitOrHelpOption (String command) {
-        return command.equals("help");
+        return status;
     }
 }

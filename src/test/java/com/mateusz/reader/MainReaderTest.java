@@ -9,7 +9,7 @@ import java.util.Arrays;
 public class MainReaderTest {
 
     // Valid command
-    @Test
+  /*  @Test
     public void testVendorAddCommandValid() {
         String command = "add vendor -n test_name -s test_service";
         String[] splitCommand = command.split("\\s");
