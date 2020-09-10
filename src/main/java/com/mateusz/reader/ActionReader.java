@@ -101,72 +101,72 @@ public class ActionReader {
             }
         }
 
-        if (parameter.equals("vendor")) {
-            Vendor vendor = new Vendor(name, service);
-            return runVendorOption(vendor, option);
-        } else if (parameter.equals("place")) {
-            Place place = new Place(name, null, null, postcode, city);
-            if (option.equals(ReaderOption.ADD)) {
-                place = readerParser.splitAddress(place, address.toString());
-            }
-            return runPlaceOption(place, option);
-        } else if (parameter.equals("settlement")) {
-            Settlement settlement = new Settlement(vendorName, placeName, meterStatus, date);
-            return runSettlementOption(settlement, option);
+        switch (parameter) {
+            case "vendor":
+                Vendor vendor = new Vendor(name, service);
+                runVendorOption(vendor, option);
+                break;
+            case "place":
+                Place place = new Place(name, null, null, postcode, city);
+                if (option.equals(ReaderOption.ADD)) {
+                    place = readerParser.splitAddress(place, address.toString());
+                }
+                runPlaceOption(place, option);
+                break;
+            case "settlement":
+                Settlement settlement = new Settlement(vendorName, placeName, meterStatus, date);
+                runSettlementOption(settlement, option);
+                break;
+            default:
+                return false;
         }
-        return false;
+        return true;
     }
 
-    // TODO: one output from method
-    private boolean runVendorOption(Vendor vendor, ReaderOption option) throws NameToRemoveNotExistInDatabaseException, NameInDatabaseAlreadyExistException {
+    private void runVendorOption(Vendor vendor, ReaderOption option) throws NameToRemoveNotExistInDatabaseException, NameInDatabaseAlreadyExistException {
             switch (option) {
                 case ADD:
                     vendorService.addVendor(vendor);
-                    return true;
+                    break;
                 case REMOVE:
                     vendorService.removeVendorByName(vendor.getName());
-                    return true;
+                    break;
                 case SHOW:
                     //TODO: return via toString()
                     for (Vendor v : vendorService.getAllVendors()) {
                         System.out.println(v.getName() + " (" + v.getService() + ")");
                     }
-                    return true;
+                    break;
             }
-            return false;
     }
 
-    // TODO: one output from method
-    private boolean runPlaceOption(Place place, ReaderOption option) throws NameToRemoveNotExistInDatabaseException, NameInDatabaseAlreadyExistException {
+    private void runPlaceOption(Place place, ReaderOption option) throws NameToRemoveNotExistInDatabaseException, NameInDatabaseAlreadyExistException {
         switch (option) {
             case ADD:
                 placeService.addPlace(place);
-                return true;
+                break;
             case REMOVE:
                 placeService.removePlaceByName(place.getName());
-                return true;
+                break;
             case SHOW:
                 //TODO: return via toString()
                 for (Place p : placeService.getAllPlaces()) {
                     System.out.println(p.getName() + " (" + p.getStreet() + ")");
                 }
-                return true;
+                break;
         }
-        return false;
     }
-
-    // TODO: one output from method
-    private boolean runSettlementOption(Settlement settlement, ReaderOption option) {
+    
+    private void runSettlementOption(Settlement settlement, ReaderOption option) {
         switch (option) {
             case ADD:
                 settlementService.addSettlement(settlement);
-                return true;
+                break;
             case REMOVE:
-                return true;
+                break;
             case SHOW:
                 //TODO: return via toString()
-                return true;
+                break;
         }
-        return false;
     }
 }

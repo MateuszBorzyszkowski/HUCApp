@@ -1,7 +1,7 @@
 package com.mateusz.dao;
 
 import com.mateusz.api.SettlementDao;
-import com.mateusz.exception.CannotFindVendorOrPlaceInDatabaseException;
+import com.mateusz.exception.CannotFindTableInDatabaseException;
 import com.mateusz.model.Settlement;
 import com.mateusz.utils.SqlClientDB;
 
@@ -54,11 +54,11 @@ public class SettlementDaoImpl implements SettlementDao {
             }
 
             if (id == 0) {
-                throw new CannotFindVendorOrPlaceInDatabaseException("Cannot find Vendor/Place in database!");
+                throw new CannotFindTableInDatabaseException("Cannot find vendor/place id in database!");
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (CannotFindVendorOrPlaceInDatabaseException e) {
+        } catch (CannotFindTableInDatabaseException e) {
             e.printStackTrace();
         }
         return id;
