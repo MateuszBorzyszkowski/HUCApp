@@ -1,6 +1,7 @@
 package com.mateusz.reader;
 
 import com.mateusz.api.PlaceService;
+import com.mateusz.api.SettlementService;
 import com.mateusz.api.VendorService;
 import com.mateusz.enums.ReaderOption;
 import com.mateusz.exception.CommandNotRecognizedException;
@@ -11,6 +12,7 @@ import com.mateusz.model.Settlement;
 import com.mateusz.model.Vendor;
 import com.mateusz.reader.parser.ReaderParser;
 import com.mateusz.service.PlaceServiceImpl;
+import com.mateusz.service.SettlementServiceImpl;
 import com.mateusz.service.VendorServiceImpl;
 
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ public class ActionReader {
     private static ActionReader instance = null;
     private final VendorService vendorService = VendorServiceImpl.getInstance();
     private final PlaceService placeService = PlaceServiceImpl.getInstance();
+    private final SettlementService settlementService = SettlementServiceImpl.getInstance();
     private final ReaderParser readerParser = ReaderParser.getInstance();
 
     private ActionReader() {
@@ -154,6 +157,16 @@ public class ActionReader {
 
     // TODO: one output from method
     private boolean runSettlementOption(Settlement settlement, ReaderOption option) {
+        switch (option) {
+            case ADD:
+                settlementService.addSettlement(settlement);
+                return true;
+            case REMOVE:
+                return true;
+            case SHOW:
+                //TODO: return via toString()
+                return true;
+        }
         return false;
     }
 }

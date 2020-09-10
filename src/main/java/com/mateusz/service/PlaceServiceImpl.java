@@ -11,7 +11,7 @@ import java.util.List;
 
 public class PlaceServiceImpl implements PlaceService {
     private static PlaceServiceImpl instance = null;
-    private PlaceDao placeDao = PlaceDaoImpl.getInstance();
+    private final PlaceDao placeDao = PlaceDaoImpl.getInstance();
 
     private PlaceServiceImpl() {}
     public static PlaceServiceImpl getInstance() {

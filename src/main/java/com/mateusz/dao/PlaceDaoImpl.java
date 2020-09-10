@@ -1,7 +1,6 @@
 package com.mateusz.dao;
 
 import com.mateusz.api.PlaceDao;
-import com.mateusz.api.VendorDao;
 import com.mateusz.model.Place;
 import com.mateusz.utils.SqlClientDB;
 

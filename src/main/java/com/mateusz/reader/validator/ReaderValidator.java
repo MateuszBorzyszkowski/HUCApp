@@ -24,6 +24,8 @@ public class ReaderValidator {
             return vendorValidate(count, option);
         } else if (parameter.equals("place")) {
             return placeValidate(count, option);
+        } else if (parameter.equals("settlement")) {
+            return settlementValidate(count, option);
         }
         return false;
     }
@@ -44,6 +46,17 @@ public class ReaderValidator {
             return count == 10;
         } else if (option == ReaderOption.REMOVE) {
             return count == 3;
+        } else if (option == ReaderOption.SHOW) {
+            return count == 1;
+        }
+        return false;
+    }
+
+    private boolean settlementValidate(int count, ReaderOption option){
+        if (option == ReaderOption.ADD) {
+            return count == 9;
+        } else if (option == ReaderOption.REMOVE) {
+            return count == 2;
         } else if (option == ReaderOption.SHOW) {
             return count == 1;
         }
