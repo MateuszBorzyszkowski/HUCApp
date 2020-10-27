@@ -7,18 +7,26 @@ description:
     add
         vendor
             -name, -n
-            -utility, -u
+            -service, -s
+        place
+            -name, -n
+            -address, -a
+            -postcode, -p
+            -city, -c
 
     remove
         vendor
             -name, -n
+        place
+            -name, -n
 
     show
         vendor
+        place
 
     exit
 
 Example:
-$ add vendor -name nameOfVendor -utility gas
+$ add vendor -name nameOfVendor -service gas
 $ remove vendor -name nameOfVendor
 

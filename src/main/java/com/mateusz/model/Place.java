@@ -1,30 +1,18 @@
 package com.mateusz.model;
 
 public class Place {
-    private int id;
     private String name;
     private String street;
     private String homeNumber;
-    private String apartmentNumber;
     private String postalCode;
     private String city;
 
-    public Place(int id, String name, String street, String homeNumber, String apartmentNumber, String postalCode, String city) {
-        this.id = id;
+    public Place(String name, String street, String homeNumber, String postalCode, String city) {
         this.name = name;
         this.street = street;
         this.homeNumber = homeNumber;
-        this.apartmentNumber = apartmentNumber;
         this.postalCode = postalCode;
         this.city = city;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -51,14 +39,6 @@ public class Place {
         this.homeNumber = homeNumber;
     }
 
-    public String getApartmentNumber() {
-        return apartmentNumber;
-    }
-
-    public void setApartmentNumber(String apartmentNumber) {
-        this.apartmentNumber = apartmentNumber;
-    }
-
     public String getPostalCode() {
         return postalCode;
     }
@@ -73,5 +53,14 @@ public class Place {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    @Override
+    public String toString() {
+        return name + " => " +
+                street + " " +
+                homeNumber + ", " +
+                postalCode + " " +
+                city;
     }
 }
